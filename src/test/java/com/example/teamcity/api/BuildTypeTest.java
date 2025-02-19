@@ -6,6 +6,7 @@ import com.example.teamcity.api.models.User;
 import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specifications;
+import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
@@ -52,11 +53,21 @@ public class BuildTypeTest extends BaseApiTest {
     @Test(description = "Project admin should be able to create build type for their project", groups = {"Positive", "Roles"})
     public void projectAdminCreatesBuildTypeTest() {
         step("Create user");
+        UserCheckRequests.getRequest(USERS).create(testData.getUser());
+
         step("Create project");
+        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
+        userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
+
         step("Grant user PROJECT_ADMIN role in project");
 
         step("Create buildType for project by user (PROJECT_ADMIN)");
+        userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
+        Response response = new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
+                .read(testData.getBuildType().getId());
+
         step("Check buildType was created successfully");
+        softy.assertEquals(response.getStatusCode(), HttpStatus.SC_OK, "Status code is incorrect");
     }
 
     @Test(description = "Project admin should not be able to create build type for not their project", groups = {"Negative", "Roles"})
