@@ -14,7 +14,7 @@ import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 public class BaseTest {
     protected SoftAssert softy;
     protected CheckedRequests superUserCheckRequests = new CheckedRequests(Specifications.superUserSpec());
-    protected CheckedRequests UserCheckRequests = new CheckedRequests(Specifications.authSpec(User.builder().build()));
+    protected CheckedRequests UserCheckRequests;
     protected TestData testData;
 
     @BeforeMethod(alwaysRun = true)

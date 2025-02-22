@@ -1,9 +1,11 @@
 package com.example.teamcity.api;
 
+import com.example.teamcity.api.generators.TestDataGenerator;
 import com.example.teamcity.api.models.BuildType;
 import com.example.teamcity.api.models.Project;
 import com.example.teamcity.api.models.User;
 import com.example.teamcity.api.requests.CheckedRequests;
+import com.example.teamcity.api.requests.RolesRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specifications;
 import io.restassured.response.Response;
@@ -25,7 +27,7 @@ public class BuildTypeTest extends BaseApiTest {
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
-
+        testData.getBuildType().getProject().setLocator(null);
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
 
         var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(testData.getBuildType().getId());
@@ -42,7 +44,7 @@ public class BuildTypeTest extends BaseApiTest {
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
-
+        testData.getBuildType().getProject().setLocator(null);
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
         new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
                 .create(buildTypeWithSameId)
@@ -52,35 +54,52 @@ public class BuildTypeTest extends BaseApiTest {
 
     @Test(description = "Project admin should be able to create build type for their project", groups = {"Positive", "Roles"})
     public void projectAdminCreatesBuildTypeTest() {
-        step("Create user");
-        UserCheckRequests.getRequest(USERS).create(testData.getUser());
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
 
-        step("Create project");
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
-        step("Grant user PROJECT_ADMIN role in project");
+        new RolesRequests(Specifications.superUserSpec())
+                .assignProjectRole(testData.getUser().getUsername(), "PROJECT_ADMIN", testData.getProject().getId());
 
-        step("Create buildType for project by user (PROJECT_ADMIN)");
+        testData.getBuildType().getProject().setLocator(null);
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
+
         Response response = new UncheckedBase(Specifications.authSpec(testData.getUser()), BUILD_TYPES)
                 .read(testData.getBuildType().getId());
 
-        step("Check buildType was created successfully");
         softy.assertEquals(response.getStatusCode(), HttpStatus.SC_OK, "Status code is incorrect");
     }
 
     @Test(description = "Project admin should not be able to create build type for not their project", groups = {"Negative", "Roles"})
     public void projectAdminCreatesBuildTypeForAnotherUserProjectTest() {
-        step("Create user1");
-        step("Create project1");
-        step("Grant user1 PROJECT_ADMIN role in project1");
+        User user1 = TestDataGenerator.generate(User.class);
+        User user2 = TestDataGenerator.generate(User.class);
+        Project project1 = TestDataGenerator.generate(Project.class);
+        Project project2 = TestDataGenerator.generate(Project.class);
 
-        step("Create user2");
-        step("Create project2");
-        step("Grant user2 PROJECT_ADMIN role in project2");
+        superUserCheckRequests.getRequest(USERS).create(user1);
+        var user1Requests = new CheckedRequests(Specifications.authSpec(user1));
+        user1Requests.<Project>getRequest(PROJECTS).create(project1);
 
-        step("Create buildType for project1 by user2");
-        step("Check buildType was not created with forbidden code");
+        new RolesRequests(Specifications.superUserSpec())
+                .assignProjectRole(user1.getUsername(), "PROJECT_ADMIN", project1.getId());
+
+        superUserCheckRequests.getRequest(USERS).create(user2);
+        var user2Requests = new CheckedRequests(Specifications.authSpec(user2));
+        user2Requests.<Project>getRequest(PROJECTS).create(project2);
+
+        new RolesRequests(Specifications.superUserSpec())
+                .assignProjectRole(user2.getUsername(), "PROJECT_ADMIN", project2.getId());
+
+        testData.getBuildType().setProject(project1);
+        testData.getBuildType().getProject().setLocator(null);
+        BuildType unauthBuildType = TestDataGenerator.generate(BuildType.class);
+        unauthBuildType.setProject(project1);
+
+        Response response = new UncheckedBase(Specifications.authSpec(user2), BUILD_TYPES)
+                .create(unauthBuildType);
+
+        softy.assertEquals(response.getStatusCode(), HttpStatus.SC_FORBIDDEN, "User2 should not be able to create BuildType in project1!");
     }
 }
