@@ -19,11 +19,16 @@ public class CreateBuildTypeTest extends BaseUiTest {
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
         var createProject = userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
         var projectID = createProject.getId();
+        System.out.println(projectID);
 
         // логинимся
-        //loginAs(testData.getUser());
+        loginAs(testData.getUser());
         // Затем откройте страницу создания билда http://localhost:8111/admin/createObjectMenu.html?projectId={projectId}&showMode=createBuildTypeMenu
 
         // Создать билд
+
+        // Проверить в апи билд
+
+        // проверить в ui билд
     }
 }

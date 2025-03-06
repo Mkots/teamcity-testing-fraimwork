@@ -9,14 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>23</maven.compiler.source>
-        <maven.compiler.target>23</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <rest-assured.version>5.1.1</rest-assured.version>
         <lombok.version>1.18.30</lombok.version>
         <testng.version>7.10.2</testng.version>
         <rest-assured.version>5.5.0</rest-assured.version>
-        <lombok.version>1.18.30</lombok.version>
         <io.qameta.allure>2.12.0</io.qameta.allure>
         <jackson.version>2.17.2</jackson.version>
         <selenide.version>7.4.3</selenide.version>
