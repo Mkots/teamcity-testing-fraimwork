@@ -35,4 +35,8 @@ public class ProjectsPage extends BasePage {
     public List<ProjectElement> getProjects() {
         return generatePageElements(projectElements, ProjectElement::new);
     }
+
+    public static ProjectPage open(String projectId) {
+        return Selenide.open("/project/" + projectId, ProjectPage.class);
+    }
 }

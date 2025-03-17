@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Role extends BaseModel {
@@ -16,4 +16,10 @@ public class Role extends BaseModel {
     private String roleId = "SYSTEM_ADMIN";
     @Builder.Default
     private String scope = "g";
+
+    public Role(String roleId, String scope) {
+        this.roleId = roleId;
+        this.scope = scope;
+    }
+
 }

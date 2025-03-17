@@ -10,9 +10,14 @@ import java.util.List;
 
 @Builder
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Roles extends BaseModel {
     private List<Role> role;
+
+    // Явный конструктор для List<Role>
+    public Roles(List<Role> role) {
+        this.role = role;
+    }
 }

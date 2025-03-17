@@ -19,4 +19,12 @@ public class User extends BaseModel {
     @Random
     private String password;
     private Roles roles;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }
