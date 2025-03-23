@@ -39,7 +39,7 @@ jobs:
       - name: Run tests
         continue-on-error: true
         # Указываем группу, чтобы не запустить тесты, связанные с сетапом TeamCity
-        run: ./mvnw test -Dtest="com.example.teamcity.${{ inputs.package }}.*Test"
+        run: ./mvnw test -Dtest="com.example.teamcity.api.*Test"
           # Создаем репорт с покрытием API тестов, основанном на Swagger.
           # Документация: https://github.com/viclovsky/swagger-coverage
           # Обязательно добавить фильтр SwaggerCoverageRestAssured в RestAssured
