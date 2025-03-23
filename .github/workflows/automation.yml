@@ -40,7 +40,7 @@ jobs:
           # Документация: https://github.com/viclovsky/swagger-coverage
           # Обязательно добавить фильтр SwaggerCoverageRestAssured в RestAssured
       - name: Run Swagger Coverage
-        continue-on-error: true
+        # continue-on-error: true
         if: ${{ inputs.package == 'api' }}
         run: .swagger-coverage-commandline/bin/swagger-coverage-commandline -s http://$HOST:8111/app/rest/swagger.json -i target/swagger-coverage-output
 
