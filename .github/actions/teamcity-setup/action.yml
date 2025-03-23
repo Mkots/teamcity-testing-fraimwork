@@ -66,9 +66,9 @@ runs:
       # Настройка сервера при первом запуске (принятие лицензии, выбор базы данных и тд), реализованная в виде теста
       run: ./mvnw clean test -Dtest=SetupServerTest#setupTeamCityServerTest
 
-    - name: Debug TeamCity Logs
+    - name: Wait for TeamCity Init
       shell: bash
-      run: docker logs teamcity-server | tail -n 50
+      run: sleep 60
 
     - name: Setup superUserToken environment variable
       shell: bash
