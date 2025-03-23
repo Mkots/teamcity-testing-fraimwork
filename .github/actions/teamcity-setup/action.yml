@@ -61,9 +61,13 @@ runs:
         -p 8111:8111 \
         jetbrains/teamcity-server:2023.11.1
 
-    - name: Debug config.properties
+    - name: Make mvnw executable
       shell: bash
-      run: cat src/main/resources/config.properties
+      run: chmod +x ./mvnw
+
+    - name: Check if tests are found
+      shell: bash
+      run: ./mvnw test -Dtest=SetupServerTest -DfailIfNoTests=false
 
     - name: Setup TeamCity server
       shell: bash
