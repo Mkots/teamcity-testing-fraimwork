@@ -55,6 +55,15 @@ runs:
       shell: bash
       run: docker ps -a
 
+    - name: Check Selenoid Status
+      shell: bash
+      run: |
+        echo "Waiting for Selenoid to be ready..."
+        for i in {1..10}; do
+          curl -s http://localhost:4444/status | jq . || true
+          sleep 3
+        done
+
     - name: Run TeamCity Server
       shell: bash
       # Флаг -u 0 запускает контейнер от имени root, чтобы был доступ к записи файлов в директории, которые указаны в volume.
