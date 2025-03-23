@@ -32,6 +32,9 @@ jobs:
       - name: TeamCity Setup
         uses: ./.github/actions/teamcity-setup
 
+      - name: List Test Files
+        run: find src/test -name "*Test.java"
+
       - name: Run tests
         continue-on-error: true
         # Указываем группу, чтобы не запустить тесты, связанные с сетапом TeamCity
