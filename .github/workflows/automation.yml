@@ -35,6 +35,10 @@ jobs:
       - name: List Test Files
         run: find src/test -name "*Test.java"
 
+      - name: Debug Inputs
+        run:
+          echo "Package: ${{ inputs.package }}"
+
       - name: Run tests
         continue-on-error: true
         # Указываем группу, чтобы не запустить тесты, связанные с сетапом TeamCity
