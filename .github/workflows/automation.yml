@@ -53,10 +53,10 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ inputs.package == 'api' }}
         with:
-          name: swagger-coverage
-        path: |
-            swagger-coverage-report.html
-            swagger-coverage-results.json
+            name: swagger-coverage
+            path: |
+              swagger-coverage-report.html
+              swagger-coverage-results.json
             
       # Загружаем историю Allure Report с специальной ветки gh-pages (https://allurereport.org/docs/integrations-github/)
       - name: Load test report history
