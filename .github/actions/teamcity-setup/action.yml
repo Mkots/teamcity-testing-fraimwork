@@ -43,13 +43,13 @@ runs:
         aerokube/selenoid:latest-release
 
     # В этом степе нет смысла запуска на GitHub Actions, но для локальной отладки с act вы можете использовать
-    #- name: Run Selenoid UI
-    #  shell: bash
-    #  run: |
-    #    docker run -d --name selenoid-ui \
-    #    -p 8080:8080 \
-    #    aerokube/selenoid-ui:latest-release \
-    #    --selenoid-uri http://$HOST:4444
+    - name: Run Selenoid UI
+      shell: bash
+      run: |
+        docker run -d --name selenoid-ui \
+        -p 8080:8080 \
+        aerokube/selenoid-ui:latest-release \
+        --selenoid-uri http://$HOST:4444
 
     - name: Run TeamCity Server
       shell: bash
@@ -63,7 +63,7 @@ runs:
 
     - name: Setup TeamCity server
       shell: bash
-       # Настройка сервера при первом запуске (принятие лицензии, выбор базы данных и тд), реализованная в виде теста
+      # Настройка сервера при первом запуске (принятие лицензии, выбор базы данных и тд), реализованная в виде теста
       run: ./mvnw clean test -Dtest=SetupServerTest#setupTeamCityServerTest
 
     - name: Setup superUserToken environment variable
