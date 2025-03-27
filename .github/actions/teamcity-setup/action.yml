@@ -6,7 +6,7 @@ runs:
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'zulu'
 
     # По умолчанию в ubuntu отсуствуе команда ifconfig
@@ -63,7 +63,6 @@ runs:
 
     - name: Setup TeamCity server
       shell: bash
-
       # Настройка сервера при первом запуске (принятие лицензии, выбор базы данных и тд), реализованная в виде теста
       run: ./mvnw clean test -Dtest=SetupServerTest#setupTeamCityServerTest
 
