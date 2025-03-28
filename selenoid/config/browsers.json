@@ -5,7 +5,7 @@
       "121.0": {
         "image": "selenoid/vnc_chrome:121.0",
         "port": "4444",
-        "path": "/"
+        "path": "/wd/hub"
       }
     }
   },
@@ -25,7 +25,7 @@
       "106.0": {
         "image": "selenoid/vnc_opera:106.0",
         "port": "4444",
-        "path": "/"
+        "path": "/wd/hub"
       }
     }
   }
